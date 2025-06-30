@@ -84,6 +84,25 @@ public class RDDApiStepByStepExample {
         System.out.println("Word Counts (after reduceByKey): " + wordCounts.collect());
 
         /**
+         * 🔥 PROBLEM: Repeated Computation
+         * Without caching, when you call wordCounts.count() and then wordCounts.take(3), Spark recomputes the full chain of transformations from:
+         * lines → words → filteredWords → wordPairs → wordCounts twice.
+         *
+         * That’s wasteful if the intermediate computation is heavy (e.g., large input, expensive filters or joins).
+         */
+        // Cache the result before running multiple actions
+        wordCounts.cache(); // Or use .persist(StorageLevel.MEMORY_AND_DISK())
+
+        // Use wordCounts in multiple actions
+        long totalWords = wordCounts.count();
+        System.out.println("totalWords: " + totalWords);
+
+        List<Tuple2<String, Integer>> topWords = wordCounts.take(3);
+        topWords.forEach(entry -> {
+            System.out.println("Word: " + entry._1 + " -> Count: " + entry._2);
+        });
+
+        /**
          * 🔹groupBy() - group words by their length
          * What it does: Groups elements based on a condition or key.
          * Output: JavaRDD<Tuple2<Key, Iterable<Value>>>
