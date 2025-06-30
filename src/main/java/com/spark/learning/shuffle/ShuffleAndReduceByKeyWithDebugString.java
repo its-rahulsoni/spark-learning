@@ -1,4 +1,4 @@
-package com.spark.learning.testing;
+package com.spark.learning.shuffle;
 
 import org.apache.spark.api.java.*;
 import org.apache.spark.SparkConf;
