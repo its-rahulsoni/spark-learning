@@ -13,7 +13,7 @@ public class BroadcastExample {
 
     public static void main(String[] args) {
 
-        SparkConf conf = new SparkConf().setAppName("RDD API Demo").setMaster("local[*]");
+        SparkConf conf = new SparkConf().setAppName("BroadcastExample").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         Map<String, String> countryCodeMap = new HashMap<>();
