@@ -1,4 +1,4 @@
-package com.spark.learning.testing;
+package com.spark.learning.lineage;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
