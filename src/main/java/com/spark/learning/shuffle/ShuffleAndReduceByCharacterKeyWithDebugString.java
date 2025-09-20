@@ -1,21 +1,19 @@
 package com.spark.learning.shuffle;
 
-import org.apache.spark.api.java.*;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class ShuffleAndReduceByKeyWithDebugString {
+public class ShuffleAndReduceByCharacterKeyWithDebugString {
+
     public static void main(String[] args) {
 
         // Creates the Spark context on your local machine using all cores.
-        SparkConf conf = new SparkConf()
-                .setAppName("ShuffleAndReduceByKeyWithDebugString")
-                .setMaster("local[*]")
-                .set("spark.serializer.objectStreamDebug", "false"); // 🔑 Disable serialization debugger;
+        SparkConf conf = new SparkConf().setAppName("ShuffleAndReduceByKeyWithDebugString").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         // Creates an RDD from a list of strings, split into partitions.
@@ -26,14 +24,14 @@ public class ShuffleAndReduceByKeyWithDebugString {
         JavaRDD<String> words = data.flatMap(line -> Arrays.asList(line.split(" ")).iterator());
 
         // Converts each word into a tuple (word, 1) → still a narrow transformation.
-        JavaPairRDD<String, Integer> wordPairs = words.mapToPair(word -> new Tuple2<>(word, 1));
+        JavaPairRDD<String, String> wordPairs = words.mapToPair(word -> new Tuple2<>(word.substring(0, 1), word)); // key = first letter, value = word ....
 
         /**
          * This is where the shuffle happens:
          * Spark groups all values for the same key across partitions.
          * It triggers a shuffle write and then a shuffle read on reduce side.
          */
-        JavaPairRDD<String, Integer> wordCounts = wordPairs.reduceByKey((a, b) -> a + b);
+        JavaPairRDD<String, String> longestWordPerLetter = wordPairs.reduceByKey((a, b) -> a.length() > b.length() ? a : b);
 
         /**
          * .toDebugString()
@@ -47,10 +45,11 @@ public class ShuffleAndReduceByKeyWithDebugString {
          *
          * Lineage shows dependency chain from original data to final transformation.
          */
-        System.out.println("RDD Lineage:\n" + wordCounts.toDebugString());
+        System.out.println("RDD Lineage:\n" + longestWordPerLetter.toDebugString());
 
         // Action that triggers execution of all lazy transformations above.
-        wordCounts.foreach(tuple -> System.out.println(tuple._1 + " -> " + tuple._2));
+        longestWordPerLetter.foreach(tuple ->
+                System.out.println("Letter " + tuple._1 + " -> Longest Word: " + tuple._2));
 
         sc.close();
 
@@ -63,4 +62,5 @@ public class ShuffleAndReduceByKeyWithDebugString {
          * After action (foreach): Spark runs the job in stages, splitting at shuffle boundaries.
          */
     }
+
 }

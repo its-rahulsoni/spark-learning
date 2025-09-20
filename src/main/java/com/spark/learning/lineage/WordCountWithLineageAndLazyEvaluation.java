@@ -50,6 +50,7 @@ public class WordCountWithLineageAndLazyEvaluation {
          * Great tool to understand how Spark constructs the execution plan before it actually runs.
          */
         // Lazy - Nothing has run yet
+        System.out.println("***** Lineage of filteredWords RDD *****");
         System.out.println(filteredWords.toDebugString()); // Prints lineage tree
 
         /**
