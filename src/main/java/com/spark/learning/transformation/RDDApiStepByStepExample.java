@@ -1,4 +1,4 @@
-package com.spark.learning.rdd_apis;
+package com.spark.learning.transformation;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
