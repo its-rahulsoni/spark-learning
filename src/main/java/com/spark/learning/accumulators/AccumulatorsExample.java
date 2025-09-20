@@ -7,6 +7,15 @@ import org.apache.spark.util.LongAccumulator;
 
 import java.util.Arrays;
 
+/**
+ * Explanation:
+ *
+ * lines.foreach() updates the accumulator per partition.
+ * count() triggers the DAG.
+ * blankLines.value() gives the total blank lines across partitions.
+ *
+ * Benefit: No need to manually aggregate per partition. Spark handles it safely.
+ */
 public class AccumulatorsExample {
 
     public static void main(String[] args) {
