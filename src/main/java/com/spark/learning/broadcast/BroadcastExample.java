@@ -1,4 +1,4 @@
-package com.spark.learning.braodcast_var;
+package com.spark.learning.broadcast;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;

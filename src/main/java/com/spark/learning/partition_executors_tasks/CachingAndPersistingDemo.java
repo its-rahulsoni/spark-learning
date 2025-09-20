@@ -1,4 +1,4 @@
-package com.spark.learning.persistent_and_caching;
+package com.spark.learning.partition_executors_tasks;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
