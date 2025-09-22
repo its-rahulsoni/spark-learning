@@ -57,7 +57,12 @@
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-sql_2.13</artifactId>
 			<version>4.0.0</version>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>  -->
+			<!-- ⛔ This removes it from your classpath at runtime
+			 The <scope>provided</scope> means Maven will not include this JAR in your application’s runtime classpath — it assumes it will be available in the cluster (like when running on Spark Submit in production).
+			 But when running locally from IntelliJ or mvn exec:java, there is no Spark cluster — so the JAR is missing → ClassNotFoundException.
+	  	     So for local development and testing, you want to omit the <scope>provided</scope> so the JAR is included in your classpath.
+			 -->
 		</dependency>
 
 		<dependency>
