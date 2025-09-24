@@ -1,0 +1,11 @@
+[
+  { "name": "John", "salary": 90000, "department": "IT" },
+  { "name": "Alice", "salary": 75000, "department": "IT" },
+  { "name": "Bob", "salary": 35000, "department": "IT" },
+  { "name": "Eve", "salary": 45000, "department": "HR" },
+  { "name": "Charlie", "salary": 120000, "department": "Finance" },
+  { "name": "David", "salary": null, "department": "Finance" },
+  { "name": "Grace", "salary": 67000, "department": null },
+  { "name": "Oscar", "salary": 80000, "department": "Sales" },
+  { "name": "Sophia", "salary": 95000, "department": "Sales" }
+]
