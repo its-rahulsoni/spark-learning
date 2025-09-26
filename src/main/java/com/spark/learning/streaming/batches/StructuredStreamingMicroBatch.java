@@ -5,6 +5,8 @@ import org.apache.spark.sql.types.*;
 import static org.apache.spark.sql.functions.*;
 import org.apache.spark.sql.streaming.*;
 
+import java.util.List;
+
 public class StructuredStreamingMicroBatch {
 
     public static void main(String[] args) throws Exception {
@@ -149,8 +151,9 @@ public class StructuredStreamingMicroBatch {
                 .start();
 
         /**
-         * High-level:
+         * foreachBatch — run SQL on each micro-batch (batchDF is a normal Dataset).
          *
+         * High-level:
          * Runs custom logic for each micro-batch.
          * Gives a Dataset<Row> for the current batch; you can run SQL, write to DB, or perform extra transforms.
          *
@@ -174,6 +177,18 @@ public class StructuredStreamingMicroBatch {
 
                     System.out.println("==== per-batch SQL results (batchId=" + batchId + ") ====");
                     q.show(false);
+
+                    // The below code is for Debugging purpose ....
+                    List<Row> rows = q.collectAsList();  // This triggers the job
+                    // Put a breakpoint here and inspect 'rows' in debugger
+                    for (Row r : rows) {
+                        System.out.println(r);
+                    }
+                    List<String> jsonRows = q.toJSON().collectAsList();
+                    for (String jr : jsonRows) {
+                        System.out.println(jr);
+                    }
+
                 })
                 .outputMode("update")
                 .trigger(Trigger.ProcessingTime("10 seconds"))
